@@ -15,4 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('roles', 'RoleController@index');
+Route::get('/roles', 'RoleController@index');
+Route::post('/roleadd', 'RoleController@store');
+Route::put('/roleupdate/{id}', 'RoleController@update');
+Route::delete('/roledelete/{id}', 'RoleController@destroy');
