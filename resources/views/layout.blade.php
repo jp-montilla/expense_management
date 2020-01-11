@@ -117,11 +117,11 @@
 	  <!-- <img src="cover.jpg"> -->
 	  <a class="main_link" id="profile_name" href="#profile">John Paul P. Montilla (Admin)</a>
 	  <a class="main_link" href="#about">Dashboard</a>
-	  <a class="main_link" href="#services">User Management</a>
-	  <a class="sub_link" href="#services">Roles</a>
+	  <a class="main_link" href="/roles">User Management</a>
+	  <a class="sub_link" href="/roles">Roles</a>
 	  <a class="sub_link" href="#services">User</a>
-	  <a class="main_link" href="#clients">Expense Management</a>
-	  <a class="sub_link" href="#clients">Expense Category</a>
+	  <a class="main_link" href="/category">Expense Management</a>
+	  <a class="sub_link" href="/category">Expense Category</a>
 	  <a class="sub_link" href="#clients">Expenses</a>
 	</div>
 
