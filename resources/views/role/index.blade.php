@@ -30,7 +30,7 @@
       	</div>
 	    <div class="modal-footer">
 	    	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	    	<button type="submit" class="btn btn-primary">Update</button>
+	    	<button type="submit" class="btn btn-primary">Save</button>
 	    </div>
       </form>
 
@@ -45,7 +45,6 @@
       <th scope="col">Display Name</th>
       <th scope="col">Description</th>
       <th scope="col">Created at</th>
-      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -55,9 +54,6 @@
 	      <td><a href="#" class="editBtn">{{ $role->name }}</a></td>
 	      <td>{{ $role->description }}</td>
 	      <td>{{ $role->created_at }}</td>
-	      <td>
-	      	<button class="btn btn-danger deletebtn">Delete</button>
-	      </td>
 	    </tr>
     @endforeach
   </tbody>
@@ -93,11 +89,11 @@
 		    <label>Description</label>
 		    <input type="text" name="description" id="description" class="form-control">
 		  </div>
-		  <button type="submit" class="btn btn-primary">Submit</button>
+		  <button type="submit" class="btn btn-primary">Update</button>
       	</div>
       </form>
 	    <div class="modal-footer">
-	    	<form id="form_delete_btn" action="/roledelete/" method="post">
+	    	<form id="form_delete_btn" action="" method="post">
 	    		{{ csrf_field() }}
       			{{ method_field('DELETE') }}
       			<input type="hidden" name="id" id="id">
@@ -127,6 +123,7 @@
 					console.log(response)
 					$('#roleAddModal').modal('hide')
 					alert("Data Saved");
+					location.reload();
 				},
 				error: function(error){
 					console.log(error)
