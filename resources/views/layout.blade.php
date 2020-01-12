@@ -123,15 +123,17 @@
 	@if (Auth::check())
 		<div class="sidenav">
 		  <!-- <img src="cover.jpg"> -->
+		  <div style="height: 50px;"></div>
 		  <a class="main_link" id="profile_name">{{ Auth::user()->name }} ({{ Auth::user()->role }})</a>
-		  <a class="main_link" href="#about">Dashboard</a>
+		  <a class="main_link" href="/dashboard">Dashboard</a>
 		  @if (Auth::user()->role == 'Administrator')
-			  <a class="main_link" href="/roles">User Management</a>
-			  <a class="sub_link" href="/roles">Roles</a>
-			  <a class="sub_link" href="/user">User</a>
-			  <a class="main_link" href="/category">Expense Management</a>
-			  <a class="sub_link" href="/category">Expense Category</a>
-			@endif
+			<a class="main_link" href="/roles">User Management</a>
+			<a class="sub_link" href="/roles">Roles</a>
+			<a class="sub_link" href="/user">User</a>
+			<a class="main_link" href="/category">Expense Management</a>
+			<a class="sub_link" href="/category">Expense Category</a>
+		  @endif
+		  <a class="sub_link" href="/expense">Expenses</a>
 		  <a class="sub_link" href="/expense">Expenses</a>
 		</div>
 

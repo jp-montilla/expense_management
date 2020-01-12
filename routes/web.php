@@ -40,6 +40,8 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::put('/expenseupdate/{id}', 'ExpenseController@update');
 	Route::delete('/expensedelete/{id}', 'ExpenseController@destroy');
 
+	Route::get('/dashboard', 'DashboardController@index');
+
 	Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 });
 
@@ -51,4 +53,4 @@ Auth::routes([
   'verify' => false, // Email Verification Routes...
 ]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
