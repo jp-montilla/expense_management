@@ -14,6 +14,7 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Role::class);
         $roles = Role::all();
         return view('role.index')->with('roles', $roles);
     }

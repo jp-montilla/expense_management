@@ -16,6 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
         $users = User::all();
         $roles = Role::all();
         return view('user.index')->with('users', $users)->with('roles',$roles);

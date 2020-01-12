@@ -134,7 +134,7 @@
 			<a class="sub_link" href="/category">Expense Category</a>
 		  @endif
 		  <a class="sub_link" href="/expense">Expenses</a>
-		  <a class="sub_link" href="/expense">Expenses</a>
+		  <a class="main_link" href="/changepassword">Change Password</a>
 		</div>
 
 		<div class="navbar">
