@@ -3,14 +3,14 @@
 @section('mainContent')
 
 <div style="margin: 20px;">
-	<label class="title">Roles<span class="sub_title" style="float: right;">Dashboard</span></label>
+	<label class="title">Expenses<span class="sub_title" style="float: right;">Dashboard</span></label>
 </div>
 
-<div class="modal fade" id="roleAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="expenseAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Role</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Expenses</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -18,14 +18,25 @@
       <form id="addform" method="POST">
       	<div class="modal-body">
       		{{ csrf_field() }}
+
+      	  <div class="form-group">
+		    <label>Expense Category</label>
+		    <select class="form-control" name="expense_category">
+		    	@foreach($category as $category)
+			  		<option value="{{ $category->name }}">{{ $category->name }}</option>
+			  	@endforeach
+			</select>
+		  </div>
+
 		  <div class="form-group">
-		    <label>Display Name</label>
-		    <input type="text" name="name" class="form-control">
+		    <label>Amount</label>
+		    <input type="number" min="1" name="amount" class="form-control">
 		  </div>
 		  <div class="form-group">
-		    <label>Description</label>
-		    <input type="text" name="description" class="form-control">
+		    <label>Entry date</label>
+		    <input type="date" name="entry_date" class="form-control">
 		  </div>
+		  <input type="hidden" name="user_id" value="{{ Auth::id() }}" class="form-control">
 		  
       	</div>
 	    <div class="modal-footer">
@@ -42,18 +53,20 @@
   <thead class="thead-dark">
     <tr>
       <th scope="col">ID</th>
-      <th scope="col">Display Name</th>
-      <th scope="col">Description</th>
+      <th scope="col">Expense Category</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Entry Date</th>
       <th scope="col">Created at</th>
     </tr>
   </thead>
   <tbody>
-  	@foreach($roles as $role)
+    @foreach($expenses as $expense)
 	    <tr>
-	      <td>{{ $role->id }}</td>
-	      <td><a href="#" class="editBtn">{{ $role->name }}</a></td>
-	      <td>{{ $role->description }}</td>
-	      <td>{{ $role->created_at }}</td>
+	      <td>{{ $expense->id }}</td>
+	      <td><a href="#" class="editBtn">{{ $expense->expense_category }}</a></td>
+	      <td>{{ $expense->amount }}</td>
+	      <td>{{ $expense->entry_date }}</td>
+	      <td>{{ $expense->created_at }}</td>
 	    </tr>
     @endforeach
   </tbody>
@@ -61,17 +74,17 @@
 
 <hr>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#roleAddModal">
-  Add Role
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#expenseAddModal">
+  Add Expenses
 </button>
 
 
 <!-- EDIT ROLE MODAL -->
-<div class="modal fade" id="roleEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="expenseEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Update Role</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Update Expenses</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -80,16 +93,26 @@
       	<div class="modal-body">
       		{{ csrf_field() }}
       		{{ method_field('PUT') }}
-      		<input type="hidden" name="id" id="id">
+
+      		<div class="form-group">
+			    <label>Expense Category</label>
+			    <select class="form-control" id="expense_category" name="expense_category">
+			    	@foreach($category_edit as $category)
+				  		<option value="{{ $category->name }}">{{ $category->name }}</option>
+				  	@endforeach
+				</select>
+			</div>
+
+      		
 		  <div class="form-group">
-		    <label>Display Name</label>
-		    <input type="text" name="name" id="name" class="form-control">
+		    <label>Amount</label>
+		    <input type="number" min="1" id="amount" name="amount" class="form-control">
 		  </div>
 		  <div class="form-group">
-		    <label>Description</label>
-		    <input type="text" name="description" id="description" class="form-control">
+		    <label>Entry date</label>
+		    <input type="date" id="entry_date" name="entry_date" class="form-control">
 		  </div>
-		  <button type="submit" class="btn btn-primary">Update</button>
+	    	<button type="submit" class="btn btn-primary">Update</button>
       	</div>
       </form>
 	    <div class="modal-footer">
@@ -117,11 +140,11 @@
 
 			$.ajax({
 				type: "POST",
-				url: "/roleadd",
+				url: "/expenseadd",
 				data: $('#addform').serialize(),
 				success: function (response){
 					console.log(response)
-					$('#roleAddModal').modal('hide')
+					$('#expenseAddModal').modal('hide')
 					alert("Data Saved");
 					location.reload();
 				},
@@ -134,7 +157,7 @@
 
 
 		$('.editBtn').on('click',function(){
-			$('#roleEditModal').modal('show');
+			$('#expenseEditModal').modal('show');
 
 			$tr = $(this).closest('tr');
 			var data = $tr.children("td").map(function(){
@@ -143,9 +166,10 @@
 			console.log(data);
 
 			$('#id').val(data[0]);
-			$('#name').val(data[1]);
-			$('#description').val(data[2]);
-			$('#form_delete_btn').attr('action', '/roledelete/'+data[0]);
+			$('#expense_category').val(data[1]);
+			$('#amount').val(data[2]);
+			$('#entry_date').val(data[3]);
+			$('#form_delete_btn').attr('action', '/expensedelete/'+data[0]);
 		});
 
 		$('#editformID').on('submit', function(e){
@@ -154,11 +178,11 @@
 			var id = $('#id').val();
 			$.ajax({
 				type: "PUT",
-				url: "/roleupdate/"+id,
+				url: "/expenseupdate/"+id,
 				data: $('#editformID').serialize(),
 				success: function (response){
 					console.log(response)
-					$('#roleEditModal').modal('hide')
+					$('#expenseEditModal').modal('hide')
 					alert("Data Updated");
 					location.reload();
 				},

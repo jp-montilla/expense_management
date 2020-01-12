@@ -3,14 +3,14 @@
 @section('mainContent')
 
 <div style="margin: 20px;">
-	<label class="title">Roles<span class="sub_title" style="float: right;">Dashboard</span></label>
+	<label class="title">User<span class="sub_title" style="float: right;">Dashboard</span></label>
 </div>
 
-<div class="modal fade" id="roleAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="userAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Role</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -19,12 +19,20 @@
       	<div class="modal-body">
       		{{ csrf_field() }}
 		  <div class="form-group">
-		    <label>Display Name</label>
+		    <label>Name</label>
 		    <input type="text" name="name" class="form-control">
 		  </div>
 		  <div class="form-group">
-		    <label>Description</label>
-		    <input type="text" name="description" class="form-control">
+		    <label>Email Address</label>
+		    <input type="email" name="email" class="form-control">
+		  </div>
+		  <div class="form-group">
+		    <label>Role</label>
+		    <select class="form-control" name="role">
+		    	@foreach($roles as $role)
+			  		<option value="{{ $role->name }}">{{ $role->name }}</option>
+			  	@endforeach
+			</select>
 		  </div>
 		  
       	</div>
@@ -44,16 +52,18 @@
       <th scope="col">ID</th>
       <th scope="col">Display Name</th>
       <th scope="col">Description</th>
+      <th scope="col">Role</th>
       <th scope="col">Created at</th>
     </tr>
   </thead>
   <tbody>
-  	@foreach($roles as $role)
+  	@foreach($users as $user)
 	    <tr>
-	      <td>{{ $role->id }}</td>
-	      <td><a href="#" class="editBtn">{{ $role->name }}</a></td>
-	      <td>{{ $role->description }}</td>
-	      <td>{{ $role->created_at }}</td>
+	      <td>{{ $user->id }}</td>
+	      <td><a href="#" class="editBtn">{{ $user->name }}</a></td>
+	      <td>{{ $user->email }}</td>
+	      <td>{{ $user->role }}</td>
+	      <td>{{ $user->created_at }}</td>
 	    </tr>
     @endforeach
   </tbody>
@@ -61,13 +71,13 @@
 
 <hr>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#roleAddModal">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userAddModal">
   Add Role
 </button>
 
 
 <!-- EDIT ROLE MODAL -->
-<div class="modal fade" id="roleEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="userEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -82,12 +92,20 @@
       		{{ method_field('PUT') }}
       		<input type="hidden" name="id" id="id">
 		  <div class="form-group">
-		    <label>Display Name</label>
+		    <label>Name</label>
 		    <input type="text" name="name" id="name" class="form-control">
 		  </div>
 		  <div class="form-group">
-		    <label>Description</label>
-		    <input type="text" name="description" id="description" class="form-control">
+		    <label>Email</label>
+		    <input type="text" name="email" id="email" class="form-control">
+		  </div>
+		  <div class="form-group">
+		    <label>Role</label>
+		    <select class="form-control" id="role" name="role">
+		    	@foreach($roles as $role)
+			  		<option value="{{ $role->name }}">{{ $role->name }}</option>
+			  	@endforeach
+			</select>
 		  </div>
 		  <button type="submit" class="btn btn-primary">Update</button>
       	</div>
@@ -117,11 +135,11 @@
 
 			$.ajax({
 				type: "POST",
-				url: "/roleadd",
+				url: "/useradd",
 				data: $('#addform').serialize(),
 				success: function (response){
 					console.log(response)
-					$('#roleAddModal').modal('hide')
+					$('#userAddModal').modal('hide')
 					alert("Data Saved");
 					location.reload();
 				},
@@ -134,7 +152,7 @@
 
 
 		$('.editBtn').on('click',function(){
-			$('#roleEditModal').modal('show');
+			$('#userEditModal').modal('show');
 
 			$tr = $(this).closest('tr');
 			var data = $tr.children("td").map(function(){
@@ -144,8 +162,9 @@
 
 			$('#id').val(data[0]);
 			$('#name').val(data[1]);
-			$('#description').val(data[2]);
-			$('#form_delete_btn').attr('action', '/roledelete/'+data[0]);
+			$('#email').val(data[2]);
+			$('#role').val(data[3]);
+			$('#form_delete_btn').attr('action', '/userdelete/'+data[0]);
 		});
 
 		$('#editformID').on('submit', function(e){
@@ -154,17 +173,16 @@
 			var id = $('#id').val();
 			$.ajax({
 				type: "PUT",
-				url: "/roleupdate/"+id,
+				url: "/userupdate/"+id,
 				data: $('#editformID').serialize(),
 				success: function (response){
 					console.log(response)
-					$('#roleEditModal').modal('hide')
+					$('#userEditModal').modal('hide')
 					alert("Data Updated");
 					location.reload();
 				},
 				error: function(error){
 					console.log(error)
-					alert("Data not saved!");
 				}
 			});
 		});

@@ -59,9 +59,16 @@
 	}
 
 
-	.main {
+	.main-active {
 	  margin-top: 50px;
 	  margin-left: 200px; /* Same as the width of the sidenav */
+	  font-size: 14px; /* Increased text to enable scrolling */
+	  padding: 50px 10px;
+	}
+
+	.main-normal {
+	  margin-top: 50px;
+	  margin-left: 0; /* Same as the width of the sidenav */
 	  font-size: 14px; /* Increased text to enable scrolling */
 	  padding: 50px 10px;
 	}
@@ -113,25 +120,33 @@
 </head>
 <body>
 
-	<div class="sidenav">
-	  <!-- <img src="cover.jpg"> -->
-	  <a class="main_link" id="profile_name" href="#profile">John Paul P. Montilla (Admin)</a>
-	  <a class="main_link" href="#about">Dashboard</a>
-	  <a class="main_link" href="/roles">User Management</a>
-	  <a class="sub_link" href="/roles">Roles</a>
-	  <a class="sub_link" href="#services">User</a>
-	  <a class="main_link" href="/category">Expense Management</a>
-	  <a class="sub_link" href="/category">Expense Category</a>
-	  <a class="sub_link" href="#clients">Expenses</a>
-	</div>
+	@if (Auth::check())
+		<div class="sidenav">
+		  <!-- <img src="cover.jpg"> -->
+		  <a class="main_link" id="profile_name">{{ Auth::user()->name }} ({{ Auth::user()->role }})</a>
+		  <a class="main_link" href="#about">Dashboard</a>
+		  @if (Auth::user()->role == 'Administrator')
+			  <a class="main_link" href="/roles">User Management</a>
+			  <a class="sub_link" href="/roles">Roles</a>
+			  <a class="sub_link" href="/user">User</a>
+			  <a class="main_link" href="/category">Expense Management</a>
+			  <a class="sub_link" href="/category">Expense Category</a>
+			@endif
+		  <a class="sub_link" href="/expense">Expenses</a>
+		</div>
 
-	<div class="navbar">
-	  <a>Welcome to Expense Manager</a>
-	  <a class="logout" style="float: right;" href="#logout">Logout</a>
-	</div>
+		<div class="navbar">
+		  <a>Welcome to Expense Manager</a>
+		  <a class="logout" style="float: right;" href="{{ url('/logout') }}">Logout</a>
+		</div>
+	@endif
 
 	<div class="container">
-		<div class="main">
+		@if (Auth::check())
+			<div class="main-active">
+		@else
+			<div class="main-normal">
+		@endif
 	 		@yield('mainContent')
 		</div>
 	</div>
