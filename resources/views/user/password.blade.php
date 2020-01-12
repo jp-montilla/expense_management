@@ -7,7 +7,7 @@
 		<h1>CHANGE PASSWORD</h1>
 		<div>
 			<hr>
-			<p>{{ $message }}</p>
+			<p class="text text-success">{{ $message }}</p>
 			<hr>
 		</div>
 		<form method="POST" action="/update_password/{{Auth::user()->id}}">

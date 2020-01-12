@@ -50,7 +50,7 @@
   <thead class="thead-dark">
     <tr>
       <th scope="col">ID</th>
-      <th scope="col">Display Name</th>
+      <th scope="col">Name</th>
       <th scope="col">Description</th>
       <th scope="col">Role</th>
       <th scope="col">Created at</th>
@@ -60,7 +60,13 @@
   	@foreach($users as $user)
 	    <tr>
 	      <td>{{ $user->id }}</td>
-	      <td><a href="#" class="editBtn">{{ $user->name }}</a></td>
+	      
+		      @if($user->role == 'Administrator')
+		      	<td>{{ $user->name }}</td>
+		      @else
+		      	<td><a href="#" class="editBtn">{{ $user->name }}</a></td>
+		      @endif
+	      
 	      <td>{{ $user->email }}</td>
 	      <td>{{ $user->role }}</td>
 	      <td>{{ $user->created_at }}</td>

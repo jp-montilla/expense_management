@@ -51,7 +51,12 @@
   	@foreach($roles as $role)
 	    <tr>
 	      <td>{{ $role->id }}</td>
-	      <td><a href="#" class="editBtn">{{ $role->name }}</a></td>
+	      	@if($role->name == 'Administrator')
+	      		<td>{{ $role->name }}</td>
+	      	@else
+	      		<td><a href="#" class="editBtn">{{ $role->name }}</a></td>
+	      	@endif
+	      </td>
 	      <td>{{ $role->description }}</td>
 	      <td>{{ $role->created_at }}</td>
 	    </tr>
@@ -141,7 +146,6 @@
 				return $(this).text();
 			}).get();
 			console.log(data);
-
 			$('#id').val(data[0]);
 			$('#name').val(data[1]);
 			$('#description').val(data[2]);
